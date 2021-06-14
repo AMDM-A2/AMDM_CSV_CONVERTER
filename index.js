@@ -8,8 +8,6 @@ var db = new sqlite3.Database('db.db', (err) => {
     console.log('Connecté à la base de données');
   });
 
-var i = 1;
-
 fs.createReadStream('data.csv')
   .pipe(csv({ separator: ';' }))
   .on('data', (data) => {
@@ -18,5 +16,4 @@ fs.createReadStream('data.csv')
             return console.log(err.message);
         }
     });
-    i++;
   });
