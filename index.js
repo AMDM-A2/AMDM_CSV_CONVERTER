@@ -10,11 +10,10 @@ var db = new sqlite3.Database('db.db', (err) => {
 
 var i = 1;
 
-const results = [];
 fs.createReadStream('data.csv')
   .pipe(csv({ separator: ';' }))
   .on('data', (data) => {
-    db.run(`INSERT INTO Gestion(id,identifiant,numeroLot,hour,valeur) VALUES(?,?,?,?,?)`, [i,data.id,data.numeroLot,data.hour,data.value] , function(err) {
+    db.run(`INSERT INTO Gestion(identifiant,numeroLot,hour,valeur) VALUES(?,?,?,?)`, [data.id,data.numeroLot,data.hour,data.value] , function(err) {
         if(err) {
             return console.log(err.message);
         }
