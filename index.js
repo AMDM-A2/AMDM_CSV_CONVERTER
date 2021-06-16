@@ -1,3 +1,4 @@
+const { UV_FS_O_FILEMAP } = require('constants');
 const csv = require('csv-parser');
 const fs = require('fs');
 var sqlite3 = require('sqlite3').verbose();
@@ -14,15 +15,6 @@ fs.createReadStream('data.csv')
     }))
     .on('data', (data) => {
         
-        //remplissage des types de produit
-        if(data.id != 'alert') {
-            db.run(`INSERT OR IGNORE INTO TypesProduits(libelle) VALUES(?);`, [data.id], function(err) {
-                if (err) {
-                    return console.log(err.message);
-                }
-            });
-        }
-
         //remplissage des lots
         db.run(`INSERT OR IGNORE INTO Lots(id) VALUES(?);`, [data.numeroLot], function(err) {
             if (err) {
@@ -38,16 +30,13 @@ fs.createReadStream('data.csv')
             });
         } else {
 
-            db.get("SELECT id FROM TypesProduits WHERE libelle = ?", [data.id], (err, row) => {
-                if (err) {
-                    return console.error(err.message);
+            db.run(`INSERT INTO Produits(typeProduit,numeroLot,heure,valeur) VALUES(?,?,?,?)`, [data.id,data.numeroLot,data.hour,data.value] , function(err) {
+                if(err) {
+                    return console.log(err.message);
                 }
-                db.run(`INSERT INTO Produits(typeProduit,numeroLot,heure,valeur) VALUES(?,?,?,?)`, [row.id,data.numeroLot,data.hour,data.value] , function(err) {
-                    if(err) {
-                        return console.log(err.message);
-                    }
-                });
             });
+                
+
 
 
             
