@@ -15,19 +15,17 @@ fs.createReadStream('data.csv')
     }))
     .on('data', (data) => {
         
-
         ajouterLot(data.numeroLot);
 
-
         if(data.id == 'alert') {
-            db.run(`INSERT INTO Alertes(numeroLot,heure,valeur) VALUES(?,?,?)`, [data.numeroLot,data.hour,data.value] , function(err) {
+            db.run(`INSERT INTO Alertes(idLot,heure) VALUES(?,?)`, [data.numeroLot,data.hour] , function(err) {
                 if(err) {
                     return console.log(err.message);
                 }
             });
         } else {
 
-            db.run(`INSERT INTO Produits(typeProduit,numeroLot,heure,valeur) VALUES(?,?,?,?)`, [data.id,data.numeroLot,data.hour,data.value] , function(err) {
+            db.run(`INSERT INTO Capteurs(libelle,idLot,heure,valeur) VALUES(?,?,?,?)`, [data.id,data.numeroLot,data.hour,data.value] , function(err) {
                 if(err) {
                     return console.log(err.message);
                 }
