@@ -11,16 +11,13 @@ var db = new sqlite3.Database('db.db', (err) => {
 
 fs.createReadStream('data.csv')
     .pipe(csv({
-        separator: ';'
+        separator: ','
     }))
     .on('data', (data) => {
         
-        //remplissage des lots
-        db.run(`INSERT OR IGNORE INTO Lots(id) VALUES(?);`, [data.numeroLot], function(err) {
-            if (err) {
-                return console.log(err.message);
-            }
-        });
+
+        ajouterLot(data.numeroLot);
+
 
         if(data.id == 'alert') {
             db.run(`INSERT INTO Alertes(numeroLot,heure,valeur) VALUES(?,?,?)`, [data.numeroLot,data.hour,data.value] , function(err) {
@@ -36,11 +33,15 @@ fs.createReadStream('data.csv')
                 }
             });
                 
-
-
-
-            
         }
 
 
     });
+
+function ajouterLot(lot) {
+        db.run(`INSERT OR IGNORE INTO Lots(id) VALUES(?);`, [lot], function(err) {
+            if (err) {
+                return console.log(err.message);
+            }
+        });
+}
