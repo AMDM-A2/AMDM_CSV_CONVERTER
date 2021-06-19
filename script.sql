@@ -1,8 +1,7 @@
 DROP TABLE IF EXISTS Alertes;
-DROP TABLE IF EXISTS Produits;
-DROP TABLE IF EXISTS TypesProduits;
+DROP TABLE IF EXISTS Capteurs;
 DROP TABLE IF EXISTS Lots;
-DROP TABLE IF EXISTS Gestion;
+DROP TABLE IF EXISTS Data;
 
 CREATE TABLE "Lots" (
     "id"    INTEGER,
@@ -13,7 +12,7 @@ CREATE TABLE "Lots" (
 CREATE TABLE "Alertes" (
     "id"    INTEGER,
     "idLot"    INTEGER NOT NULL,
-    "heure"    datetime NOT NULL,
+    "date"    DATETIME NOT NULL,
     "description"    TEXT,
     PRIMARY KEY("id"),
     FOREIGN KEY("idLot") REFERENCES "Lots"("id")
@@ -21,10 +20,18 @@ CREATE TABLE "Alertes" (
 
 CREATE TABLE "Capteurs" (
     "id"    INTEGER,
-    "idLot"    INTEGER NOT NULL,
-    "heure"    datetime NOT NULL,
     "libelle"    TEXT NOT NULL,
+    "description"    TEXT,
+    PRIMARY KEY("id")
+);
+
+CREATE TABLE "Data" (
+    "id"    INTEGER,
+    "idLot"    INTEGER NOT NULL,
+	"capteur"    INTEGER NOT NULL,
+    "date"    DATETIME NOT NULL,
     "valeur"    INTEGER NOT NULL,
     PRIMARY KEY("id"),
-    FOREIGN KEY("idLot") REFERENCES Lots(id)
+    FOREIGN KEY("idLot") REFERENCES Lots(id),
+	FOREIGN KEY("capteur") REFERENCES Capteurs(id)
 );
