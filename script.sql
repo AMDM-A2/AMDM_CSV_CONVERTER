@@ -20,7 +20,7 @@ CREATE TABLE "Alertes" (
 
 CREATE TABLE "Capteurs" (
     "id"    INTEGER,
-    "libelle"    TEXT NOT NULL,
+    "libelle"    TEXT UNIQUE NOT NULL,
     "description"    TEXT,
     PRIMARY KEY("id")
 );
@@ -28,10 +28,10 @@ CREATE TABLE "Capteurs" (
 CREATE TABLE "Data" (
     "id"    INTEGER,
     "idLot"    INTEGER NOT NULL,
-	"capteur"    INTEGER NOT NULL,
+    "capteur"    INTEGER NOT NULL,
     "date"    DATETIME NOT NULL,
     "valeur"    INTEGER NOT NULL,
     PRIMARY KEY("id"),
     FOREIGN KEY("idLot") REFERENCES Lots(id),
-	FOREIGN KEY("capteur") REFERENCES Capteurs(id)
+    FOREIGN KEY("capteur") REFERENCES Capteurs(id)
 );
